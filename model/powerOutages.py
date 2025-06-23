@@ -64,3 +64,7 @@ class Event:
     def __hash__(self):
         return hash(self._id)
 
+    def duration(self):
+        delta = self._date_event_finished - self._date_event_began
+        hours = delta.total_seconds() / 3600
+        return hours

@@ -13,8 +13,24 @@ class Controller:
         self.fillIDMap()
 
     def handleWorstCase(self, e):
-        # TO FILL
-        pass
+        if self._view._ddNerc.value is None or self._view._txtYears.value is None or self._view._txtHours.value is None:
+            self._view.create_alert("Complete all fields!")
+        nerc_value = self._view._ddNerc.value
+        try:
+            years = int(self._view._txtYears.value)
+            hours = float(self._view._txtHours.value)
+        except ValueError:
+            self._view.create_alert("Please enter a number.")
+        events, tot_hours, tot_people_affected = self._model.worstCase(nerc_value, years, hours)
+        txt_out = f"Tot people affected: {tot_people_affected}\nTot hours of outage: {tot_hours}\n"
+        for event in events:
+            txt_out += str(event) + "\n"
+        self._view._txtOut.controls.append(ft.Text(txt_out))
+        self._view._ddNerc.value = None
+        self._view._txtYears.value = None
+        self._view._txtHours.value = None
+        self._view.update_page()
+        self._view._txtOut.controls.clear()
 
     def fillDD(self):
         nercList = self._model.listNerc
